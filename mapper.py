@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Mapper: Extracts hourly data from Uber trip records.
 """
