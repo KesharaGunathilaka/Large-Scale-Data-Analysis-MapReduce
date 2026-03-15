@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 #Reducer: Aggregates trip counts by hour.
 
 import sys
