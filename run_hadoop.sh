@@ -1,6 +1,6 @@
 # run_hadoop.sh — script to run the Uber Pickups MapReduce job on Hadoop
 
-set -e   
+set -e
 
 # Configuration
 CSV_FILE="${1:-uber-raw-data-jul14.csv}"          # Local dataset path
@@ -30,11 +30,11 @@ info "Hadoop home      : $HADOOP_HOME"
 info "Streaming jar    : $HADOOP_STREAMING_JAR"
 info "Dataset          : $CSV_FILE  ($(wc -l < "$CSV_FILE") lines)"
 
-# ── Make scripts executable ────────────────────────────────────────────────────
+# Make scripts executable
 chmod +x mapper.py reducer.py
 info "Scripts marked executable."
 
-# ── Start Hadoop services (if not running) ─────────────────────────────────────
+# Start Hadoop services
 info "Checking HDFS status..."
 # Check if namenode process is actually running (more reliable than dfsadmin)
 if ! jps 2>/dev/null | grep -q "NameNode"; then
@@ -48,11 +48,11 @@ else
     info "Hadoop services already running ($(jps 2>/dev/null | grep -E 'NameNode|DataNode|ResourceManager' | awk '{print $2}' | tr '\n' ' '))"
 fi
 
-# ── Upload dataset to HDFS ─────────────────────────────────────────────────────
+# Upload dataset to HDFS 
 info "Preparing HDFS directories..."
 hdfs dfs -mkdir -p "$HDFS_INPUT"
 
-# Remove old output if it exists (Hadoop refuses to overwrite)
+# Remove old output if it exists
 if hdfs dfs -test -d "$HDFS_OUTPUT" 2>/dev/null; then
     warn "Removing existing HDFS output: $HDFS_OUTPUT"
     hdfs dfs -rm -r "$HDFS_OUTPUT"
@@ -62,7 +62,7 @@ info "Uploading $CSV_FILE to HDFS..."
 hdfs dfs -put -f "$CSV_FILE" "$HDFS_INPUT/"
 info "Upload complete."
 
-# ── Run MapReduce job ──────────────────────────────────────────────────────────
+# Run MapReduce job
 info "Submitting MapReduce streaming job..."
 hadoop jar "$HADOOP_STREAMING_JAR" \
     -files "$MAPPER,$REDUCER" \
@@ -73,15 +73,13 @@ hadoop jar "$HADOOP_STREAMING_JAR" \
 
 info "MapReduce job completed successfully!"
 
-# ── Retrieve results ───────────────────────────────────────────────────────────
+# Retrieve results
 mkdir -p results
 info "Fetching results from HDFS..."
 hdfs dfs -cat "$HDFS_OUTPUT/part-*" > "$RESULTS_FILE"
 
 echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  UBER PICKUPS BY HOUR OF DAY — JULY 2014"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 cat "$RESULTS_FILE"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
