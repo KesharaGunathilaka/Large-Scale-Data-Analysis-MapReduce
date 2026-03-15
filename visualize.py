@@ -91,8 +91,6 @@ DATABASE COVERAGE:
     with open(report_path, 'w', encoding='utf-8') as f:
         f.write(report)
     print(f" Statistics report saved to: {report_path}")
-    print(f"\nAll visualizations completed!\n")
-
 
 if __name__ == '__main__':
     visualize()
