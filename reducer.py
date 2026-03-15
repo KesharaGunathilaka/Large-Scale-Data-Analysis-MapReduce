@@ -1,54 +1,74 @@
 #!/usr/bin/env python3
+"""
+Reducer: Aggregates Uber pickup counts by hour of day.
+Task: Sum all counts emitted by the Mapper for each hour key.
 
-#Reducer: Aggregates trip counts by hour.
+Input format (sorted key\tvalue from Hadoop shuffle):
+  00\t1
+  00\t1
+  01\t1
+  ...
+
+Output format:
+  Hour 00:00\t<total_count>
+  Hour 01:00\t<total_count>
+  ...
+  Hour 23:00\t<total_count>
+"""
 
 import sys
 import logging
 
-# Configure logging
-logging.basicConfig(level=logging.ERROR, format='%(levelname)s: %(message)s')
+# Configure logging to stderr so it does not pollute Hadoop output
+logging.basicConfig(level=logging.WARNING, stream=sys.stderr,
+                    format='%(levelname)s: %(message)s')
 
-current_hour = None
+current_hour  = None
 current_count = 0
+total_trips   = 0
 
-# Main processing loop - input assumed to be sorted by hour from mapper output
+# ── Main processing loop ──────────────────────────────────────────────────────
+# Hadoop guarantees input is sorted by key, so all records for the same
+# hour arrive consecutively.  We just accumulate until the key changes.
+
 for line in sys.stdin:
     line = line.strip()
-    
-    # Skip empty lines
+
     if not line:
         continue
-    
+
     try:
-        # Parse mapper output format: hour\tcount
         parts = line.split('\t')
         if len(parts) != 2:
-            logging.debug(f"Skipped invalid format: {line}")
+            logging.warning(f"Unexpected format (expected 2 fields): {repr(line)}")
             continue
-            
+
         hour_str, count_str = parts
-        hour = int(hour_str)
+        hour  = int(hour_str)
         count = int(count_str)
-        
-        # Validate hour range (0-23)
+
+        # Basic validation
         if hour < 0 or hour > 23:
-            logging.debug(f"Invalid hour range: {hour}")
+            logging.warning(f"Hour out of range: {hour}")
             continue
-            
+
     except ValueError as e:
-        logging.debug(f"Skipped malformed line: {line} - {str(e)}")
+        logging.warning(f"Skipped malformed line: {repr(line)} — {e}")
         continue
-    
-    # Accumulate counts for current hour
+
+    # ── Reducer logic ──
     if current_hour == hour:
-        current_count += count
+        current_count += count          # Same key → accumulate
     else:
-        if current_hour is not None:
+        if current_hour is not None:    # Flush previous hour
             print(f"Hour {current_hour:02d}:00\t{current_count}")
-        
-        current_hour = hour
+            total_trips += current_count
+        current_hour  = hour
         current_count = count
 
-# Output the final hour's total
+# Flush the last hour
 if current_hour is not None:
     print(f"Hour {current_hour:02d}:00\t{current_count}")
+    total_trips += current_count
+
+logging.warning(f"Reducer done — total trips counted: {total_trips}")
