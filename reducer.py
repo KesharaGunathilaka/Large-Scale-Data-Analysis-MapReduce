@@ -1,11 +1,9 @@
-#!/usr/bin/env python3
-
 #Reducer: Aggregates trip counts by hour.
 
 import sys
 import logging
 
-# Configure logging to stderr so it does not pollute Hadoop output
+# Configure logging 
 logging.basicConfig(level=logging.WARNING, stream=sys.stderr,
                     format='%(levelname)s: %(message)s')
 
@@ -13,10 +11,7 @@ current_hour  = None
 current_count = 0
 total_trips   = 0
 
-# ── Main processing loop ──────────────────────────────────────────────────────
-# Hadoop guarantees input is sorted by key, so all records for the same
-# hour arrive consecutively.  We just accumulate until the key changes.
-
+# Main processing loop 
 for line in sys.stdin:
     line = line.strip()
 
@@ -42,11 +37,11 @@ for line in sys.stdin:
         logging.warning(f"Skipped malformed line: {repr(line)} — {e}")
         continue
 
-    # ── Reducer logic ──
+    # Reducer logic
     if current_hour == hour:
-        current_count += count          # Same key → accumulate
+        current_count += count         
     else:
-        if current_hour is not None:    # Flush previous hour
+        if current_hour is not None:    
             print(f"Hour {current_hour:02d}:00\t{current_count}")
             total_trips += current_count
         current_hour  = hour
