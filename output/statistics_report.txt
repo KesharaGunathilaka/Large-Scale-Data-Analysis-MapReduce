@@ -1,0 +1,18 @@
+
+
+NEW YORK CITY UBER TRIP DATA STATISTICS REPORT - July 2014 Analysis                      
+
+SUMMARY STATISTICS:
+  • Total Trips: 796,121
+  • Average per Hour: 33171.71
+  • Median per Hour: 31722.5
+  • Standard Deviation: 15546.94
+
+EXTREME VALUES:
+  • Peak Hour: 17:00 with 58,260 trips
+  • Lowest Hour: 02:00 with 8,562 trips
+  • Range: 49,698 trips
+
+DATABASE COVERAGE:
+  • Hours Analyzed: 24
+  • Data Completeness: 100%
