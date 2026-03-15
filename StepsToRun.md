@@ -1,8 +1,6 @@
 # Large-Scale Data Analysis Using Hadoop MapReduce
 
-**Module:** Cloud Computing (EE7222/EC7204) — University of Ruhuna  
-**Semester:** 7 | February 2026  
-**Task:** Count total Uber pickups per hour of the day (00:00–23:00)  
+**Module:** Cloud Computing (EE7222/EC7204) 
 **Dataset:** [Uber Pickups in New York City — FiveThirtyEight (Kaggle)](https://www.kaggle.com/datasets/fivethirtyeight/uber-pickups-in-new-york-city?select=uber-raw-data-jul14.csv)
 
 ---
@@ -17,7 +15,7 @@ hadoop version
 
 Expected output:
 ```
-Hadoop 3.3.6
+Hadoop 3.x.x
 ```
 
 If you get `command not found`, Hadoop is not installed. Install it first:
@@ -103,9 +101,7 @@ git clone https://github.com/KesharaGunathilaka/Large-Scale-Data-Analysis-MapRed
 cd Large-Scale-Data-Analysis-MapReduce
 ```
 
-> ⚠️ Make sure your project folder path has **no spaces**.
-> Good: `~/cloud/Large-Scale-Data-Analysis-MapReduce`
-> Bad: `~/My Projects/Large Scale Data Analysis`
+> Make sure your project folder path has **no spaces**.
 
 ---
 
@@ -135,7 +131,24 @@ echo $HADOOP_STREAMING_JAR
 
 ---
 
-## Step 6 — Upload the Dataset to HDFS
+## Step 6 — Run the Automated Script (`run_hadoop.sh`) (Recommended)
+
+Make sure scripts are executable, then run:
+
+```bash
+ bash run_hadoop.sh data/uber-raw-data-jul14.csv
+```
+
+This script will automatically:
+- Start Hadoop services if needed.
+- Upload the dataset to HDFS.
+- Run the Hadoop Streaming job.
+- Save reducer output to `results/output.txt`.
+- Generate `results/output_daily_avg.json`.
+
+---
+
+## Step 7 — Upload the Dataset to HDFS (Manual Alternative)
 
 ```bash
 hdfs dfs -mkdir -p /user/uber/input
@@ -151,7 +164,7 @@ hdfs dfs -ls /user/uber/input/
 
 ---
 
-## Step 7 — Run the MapReduce Job
+## Step 8 — Run the MapReduce Job
 
 ```bash
 hadoop jar $HADOOP_STREAMING_JAR -files mapper.py,reducer.py -mapper "python3 mapper.py" -reducer "python3 reducer.py" -input /user/uber/input/uber-raw-data-jul14.csv -output /user/uber/output
@@ -170,7 +183,7 @@ map 100% reduce 100%
 
 ---
 
-## Step 8 — View the Results
+## Step 9 — View the Results
 
 ```bash
 hdfs dfs -cat /user/uber/output/part-*
@@ -178,7 +191,7 @@ hdfs dfs -cat /user/uber/output/part-*
 
 ---
 
-## Step 9 — Save Results Locally
+## Step 10 — Save Results Locally
 
 ```bash
 hdfs dfs -cat /user/uber/output/part-* > results/output.txt
@@ -192,7 +205,7 @@ cat results/output.txt
 ```
 Hour 00:00      17953
 Hour 01:00      11527
-Hour 02:00       8562   <- Quietest hour
+Hour 02:00       8562
 Hour 03:00       9199
 Hour 04:00      10040
 Hour 05:00      14932
@@ -207,7 +220,7 @@ Hour 13:00      35832
 Hour 14:00      41357
 Hour 15:00      46053
 Hour 16:00      52403
-Hour 17:00      58260   <- Peak hour
+Hour 17:00      58260
 Hour 18:00      57268
 Hour 19:00      52332
 Hour 20:00      51859
@@ -236,25 +249,3 @@ Large-Scale-Data-Analysis-MapReduce/
 │   └── output.txt       # MapReduce output (24 hourly counts)
 └── README.md
 ```
-
----
-
-## Useful Web UIs (while Hadoop is running)
-
-| Interface | URL |
-|-----------|-----|
-| HDFS NameNode | http://localhost:9870 |
-| YARN ResourceManager | http://localhost:8088 |
-
----
-
-## Troubleshooting
-
-| Problem | Solution |
-|---------|----------|
-| `hadoop: command not found` | Run `source ~/.bashrc` or reinstall Hadoop |
-| `DataNode` missing from `jps` | Follow the DataNode fix in Step 2 |
-| `Connection refused` on port 9000 | Run `start-dfs.sh` |
-| `Output directory already exists` | Run `hdfs dfs -rm -r /user/uber/output` |
-| `Illegal character in path` (spaces) | Move project to a path with no spaces |
-| `HADOOP_STREAMING_JAR` is empty | Re-run the export command in Step 5 |
