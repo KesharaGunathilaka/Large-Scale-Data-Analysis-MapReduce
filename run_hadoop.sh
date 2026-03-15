@@ -1,14 +1,8 @@
-#!/bin/bash
-# =============================================================================
-# run_hadoop.sh — End-to-end script to run the Uber Pickups MapReduce job
-#                 on Hadoop 3.x (WSL/Linux single-node pseudo-distributed)
-#
-# Usage:  bash run_hadoop.sh [path/to/uber-raw-data-jul14.csv]
-# =============================================================================
+# run_hadoop.sh — script to run the Uber Pickups MapReduce job on Hadoop
 
-set -e   # Exit immediately on any error
+set -e   
 
-# ── Configuration ─────────────────────────────────────────────────────────────
+# Configuration
 CSV_FILE="${1:-uber-raw-data-jul14.csv}"          # Local dataset path
 HDFS_INPUT="/user/uber/input"                     # HDFS input directory
 HDFS_OUTPUT="/user/uber/output"                   # HDFS output directory
@@ -17,13 +11,13 @@ MAPPER="mapper.py"
 REDUCER="reducer.py"
 RESULTS_FILE="results/output.txt"
 
-# ── Colour helpers ─────────────────────────────────────────────────────────────
+# Colour helpers
 GREEN='\033[0;32m'; YELLOW='\033[1;33m'; RED='\033[0;31m'; NC='\033[0m'
 info()    { echo -e "${GREEN}[INFO]${NC}  $*"; }
 warn()    { echo -e "${YELLOW}[WARN]${NC}  $*"; }
 error()   { echo -e "${RED}[ERROR]${NC} $*"; exit 1; }
 
-# ── Pre-flight checks ──────────────────────────────────────────────────────────
+# Pre-flight checks
 info "=== Uber Pickups MapReduce Job ==="
 
 [ -z "$HADOOP_HOME" ]         && error "HADOOP_HOME is not set. Did you source hadoop-env.sh?"
