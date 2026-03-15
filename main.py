@@ -55,7 +55,7 @@ def run_pipeline():
     print(f"Reducer produced {len(results)} hourly aggregates")
     
     # Save results as JSON
-    output_file = output_dir / 'hourly_trips.json'
+    output_file = output_dir / 'total_trips.json'
     total = sum(results.values())
     with open(output_file, 'w') as f:
         json.dump({
