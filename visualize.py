@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Visualization: Generate bar chart and statistics report
 python visualize.py
