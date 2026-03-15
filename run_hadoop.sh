@@ -95,3 +95,14 @@ PY
 
 log "Total count text output: $TOTAL_RESULTS_FILE"
 log "Daily average JSON output: $AVERAGE_JSON_FILE"
+
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  UBER PICKUPS BY HOUR OF DAY - JULY 2014"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+cat "$TOTAL_RESULTS_FILE"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+PEAK=$(sort -t$'\t' -k2 -rn "$TOTAL_RESULTS_FILE" | head -1)
+echo ""
+log "Peak hour: $PEAK"
