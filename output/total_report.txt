@@ -1,5 +1,5 @@
 
---- HOURLY STATISTICS ---
+--- TOTAL STATISTICS ---
 Total Trips: 796,121
 Peak Hour: 17:00 (58,260 trips)
 Average: 33171.71

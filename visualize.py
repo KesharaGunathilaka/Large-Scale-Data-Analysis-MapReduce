@@ -34,7 +34,7 @@ def generate_visuals(json_file, output_dir, file_prefix):
     ax.set_xlabel('Hour of Day', fontsize=12, fontweight='bold')
     ax.set_ylabel('Number of Trips', fontsize=12, fontweight='bold')
     ax.set_title(
-        f'Hourly Distribution - {file_prefix.replace("_", " ").title()}', fontsize=14, fontweight='bold')
+        f'Hourly Distribution of New York City Uber Trips in July 2014 - {file_prefix.replace("_", " ").title()}', fontsize=14, fontweight='bold')
     ax.set_xticks(range(len(hours)))
     ax.set_xticklabels(hours, rotation=45)
     ax.grid(True, axis='y', alpha=0.3)
@@ -70,9 +70,9 @@ Average: {avg:.2f}
 if __name__ == '__main__':
     base_dir = Path(__file__).parent
 
-    json_py = base_dir / 'output' / 'hourly_trips.json'
+    json_py = base_dir / 'output' / 'total_trips.json'
     out_py = base_dir / 'output'
-    generate_visuals(json_py, out_py, "hourly")
+    generate_visuals(json_py, out_py, "total")
 
     json_wsl = base_dir / 'results' / 'output_daily_avg.json'
     out_wsl = base_dir / 'results'
