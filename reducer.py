@@ -1,20 +1,6 @@
 #!/usr/bin/env python3
-"""
-Reducer: Aggregates Uber pickup counts by hour of day.
-Task: Sum all counts emitted by the Mapper for each hour key.
 
-Input format (sorted key\tvalue from Hadoop shuffle):
-  00\t1
-  00\t1
-  01\t1
-  ...
-
-Output format:
-  Hour 00:00\t<total_count>
-  Hour 01:00\t<total_count>
-  ...
-  Hour 23:00\t<total_count>
-"""
+#Reducer: Aggregates trip counts by hour.
 
 import sys
 import logging
@@ -69,6 +55,3 @@ for line in sys.stdin:
 # Flush the last hour
 if current_hour is not None:
     print(f"Hour {current_hour:02d}:00\t{current_count}")
-    total_trips += current_count
-
-logging.warning(f"Reducer done — total trips counted: {total_trips}")

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 MapReduce Pipeline: Analyze Uber trip data by hour
 python main.py

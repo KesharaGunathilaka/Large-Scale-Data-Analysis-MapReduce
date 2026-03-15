@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Mapper: Extracts hourly trip count data from Uber NYC pickup records.
 Dataset: Uber Pickups in New York City (FiveThirtyEight)
