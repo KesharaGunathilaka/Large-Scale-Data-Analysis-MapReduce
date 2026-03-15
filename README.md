@@ -18,31 +18,24 @@ This implementation uses the MapReduce paradigm to process **796,121 Uber trip r
 
 ## ⚡ Quick Start
 
-### 1️⃣ Prerequisites
+Run these commands in a normal terminal on Windows or inside your WSL Ubuntu terminal.
+
 ```bash
-# Python 3.7 or higher
-python --version
+# 1. Clone the repository
+git clone https://github.com/KesharaGunathilaka/Large-Scale-Data-Analysis-MapReduce.git
+cd Large-Scale-Data-Analysis-MapReduce
 
-# Install required packages
-pip install matplotlib numpy
-```
+# 2. Install Python dependencies
+pip install matplotlib numpy    # or: pip3 install matplotlib numpy
 
-### 2️⃣ Run Pipeline
-```bash
-# Navigate to project directory
-cd "d:\Documents\Project\16. Cloud Hadoop LargeScale Data Analysis MapReduce\Large-Scale-Data-Analysis-MapReduce"
+# 3. Run the MapReduce analysis
+python main.py                  # or: python3 main.py
 
-# Run MapReduce pipeline (process all data)
-python main.py
-```
-
-### 3️⃣ Generate Visualizations
-```bash
-# Generate bar chart and statistics report
+# 4. Generate visualizations
 python visualize.py
 ```
 
-**Total execution time:** ~10 seconds
+That’s it. Hadoop/WSL can be part of your environment, but this project runs as a local Python MapReduce job.
 
 ## 🎯 What You Get
 
